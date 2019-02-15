@@ -1,7 +1,7 @@
 <template>
   <div class="regist">
-    <div class="regist-title">注册</div>
     <div class="reg-form">
+      <div class="regist-title">注册</div>
       <el-form :model="ruleForm"
                :rules="rules"
                ref="ruleForm"
@@ -40,6 +40,9 @@
           <el-button type="primary"
                      @click="submitForm('ruleForm')">注册</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button type="text"
+                     size="mini"
+                     @click="goLog">已有账号?去登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -108,6 +111,12 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    goLog() {
+      this.$router.push({
+        path: "/login",
+        name: "Login"
+      });
     }
   }
 };
@@ -121,7 +130,7 @@ export default {
 .regist-title {
   width: 100%;
   line-height: 80px;
-  margin: 20px 0;
+  margin: 0 0 20px 0;
   color: #409eff;
   text-align: center;
   font-size: 24px;
@@ -130,7 +139,6 @@ export default {
 
 .reg-form {
   padding: 25px;
-  /* border: 1px solid #409EFF; */
   border-radius: 5px;
   box-shadow: 5px 5px 5px #ccc;
   background-color: #ececec;

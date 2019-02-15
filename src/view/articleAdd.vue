@@ -1,25 +1,37 @@
 <template>
-  <div class="login">
-    <div class="reg-form">
-      <div class="login-title">登录</div>
+  <div class="article-add">
+    <div class="article-add-form">
+      <div class="article-add-title">发表文章</div>
       <el-form :model="ruleForm"
                :rules="rules"
                ref="ruleForm"
                label-width="80px"
                class="demo-ruleForm">
-        <el-form-item label="昵称"
+        <el-form-item label="标题"
                       prop="username">
           <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码"
-                      prop="password">
-          <el-input v-model="ruleForm.password"></el-input>
+        <el-form-item label="标签"
+                      prop="tag">
+          <el-select v-model="ruleForm.tag"
+                     placeholder="请选择标签">
+            <el-option label="前端"
+                       value="web"></el-option>
+            <el-option label="其他"
+                       value="other"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="内容"
+                      prop="content">
+          <el-input type="textarea"
+                    :rows="5"
+                    v-model="ruleForm.content"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
-                     @click="submitForm('ruleForm')">登录</el-button>
+                     @click="submitForm('ruleForm')">发表</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
-          <el-button type="text" size="mini" @click="goReg">没有账号?去注册</el-button>
+
         </el-form-item>
       </el-form>
     </div>
@@ -32,15 +44,13 @@ export default {
     return {
       ruleForm: {
         username: "",
-        password: ""
+        content: "",
+        tag: ""
       },
       rules: {
-        username: [
-          { required: true, message: "请输入昵称", trigger: "blur" },
-          { min: 6, max: 10, message: "长度在 6 到 10 个字符", trigger: "blur" }
-        ],
-
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        username: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        content: [{ required: true, message: "请输入内容", trigger: "blur" }],
+        tag: [{ required: true, message: "请选择标签", trigger: "change" }]
       }
     };
   },
@@ -58,23 +68,17 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    },
-    goReg() {
-      this.$router.push({
-        path: "/register",
-        name: "Register"
-      })
     }
   }
 };
 </script>
 <style scoped>
-.login {
-  width: 450px;
+.article-add {
+  width: 50%;
   margin: 80px auto;
 }
 
-.login-title {
+.article-add-title {
   width: 100%;
   line-height: 80px;
   margin: 0 0 20px 0;
@@ -84,10 +88,13 @@ export default {
   font-weight: bold;
 }
 
-.reg-form {
+.article-add-form {
   padding: 25px;
   border-radius: 5px;
   box-shadow: 5px 5px 5px #ccc;
   background-color: #ececec;
+}
+.el-select{
+  width: 100%;
 }
 </style>

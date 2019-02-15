@@ -23,8 +23,8 @@
             <template slot="title">
               子夜照弦歌
             </template>
-            <el-menu-item index="1-1">我的主页</el-menu-item>
-            <el-menu-item index="1-2">列表分类</el-menu-item>
+            <el-menu-item index="1-1" @click="goUserInfo">我的主页</el-menu-item>
+            <el-menu-item index="1-2" @click="goTagsList">列表分类</el-menu-item>
             <el-menu-item index="1-3"
                           @click="quit">登出</el-menu-item>
           </el-submenu>
@@ -39,7 +39,7 @@
 
       <el-col :span="3"
               style="text-align:left;">
-        <el-button type="primary"
+        <el-button type="primary" @click="addActicle()"
                    round>发表文章</el-button>
 
       </el-col>
@@ -48,12 +48,13 @@
 </template>
 
 <script>
+import {goUserInfo} from '../util/methods.js'
 export default {
   data() {
     return {
       activeIndex: "0",
       search: "",
-      isShowLog: false
+      isShowLog: true
     };
   },
 
@@ -74,7 +75,22 @@ export default {
       })
     },
     quit() {},
-    searchFun() {}
+    addActicle() {
+      this.$router.push({
+        path: "/tags/list",
+        name: "ArticleAdd"
+      })
+    },
+    goTagsList() {
+      this.$router.push({
+        path: "/article/add",
+        name: "TagsList"
+      })
+    },
+    searchFun() {},
+    goUserInfo() {
+      goUserInfo(this)
+    }
   }
 };
 </script>
@@ -85,6 +101,10 @@ export default {
   line-height: 60px;
   text-align: center;
   border-bottom: solid 1px #e6e6e6;
+  position: fixed;
+  top: 0;
+  background-color: #fff;
+  z-index: 9999;
 }
 .logo {
   color: #409eff;
