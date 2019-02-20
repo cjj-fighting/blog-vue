@@ -54,7 +54,7 @@ export default {
     return {
       activeIndex: "0",
       search: "",
-      isShowLog: true
+      isShowLog: false
     };
   },
 

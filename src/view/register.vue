@@ -13,22 +13,22 @@
         </el-form-item>
         <el-form-item label="密码"
                       prop="password">
-          <el-input v-model="ruleForm.password"></el-input>
+          <el-input v-model="ruleForm.password" type="password"></el-input>
         </el-form-item>
         <el-form-item label="确认密码"
                       prop="confimPassword">
-          <el-input v-model="ruleForm.confimPassword"></el-input>
+          <el-input v-model="ruleForm.confimPassword" type="password"></el-input>
         </el-form-item>
         <el-form-item label="性别"
                       prop="gender">
           <el-select v-model="ruleForm.gender"
                      placeholder="请选择性别">
             <el-option label="女"
-                       value="0"></el-option>
+                       value="f"></el-option>
             <el-option label="男"
-                       value="1"></el-option>
+                       value="m"></el-option>
             <el-option label="保密"
-                       value="2"></el-option>
+                       value="x"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="描述"
@@ -50,6 +50,9 @@
 </template>
 
 <script>
+import axios from "axios"
+import Qs from "qs"
+import md5 from "md5"
 export default {
   data() {
     let validatePass = (rule, value, callback) => {
@@ -77,12 +80,12 @@ export default {
         gender: "",
         password: "",
         confimPassword: "",
-        desc: ""
+        desc: null
       },
       rules: {
         username: [
           { required: true, message: "请输入昵称", trigger: "blur" },
-          { min: 6, max: 10, message: "长度在 6 到 10 个字符", trigger: "blur" }
+          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
         ],
 
         password: [
@@ -102,9 +105,65 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+
+          // const options = {
+          //   method: "POST",
+          //   headers: { "content-type": "application/x-www-form-urlencoded" },
+          //   data: qs.stringify(data),
+          //   url
+          // };
+
+          axios({
+            url: "/api/register",
+            method: "post",
+            transformRequest: [
+              function(data) {
+                return Qs.stringify(data);
+              }
+            ],
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }, //deviceCode: "A95ZEF1-47B5-AC90BF3"
+
+            data: {
+              name: this.ruleForm.username,
+              gender: this.ruleForm.gender,
+              password: md5(this.ruleForm.password),
+              // confirmpass: this.ruleForm.confimPassword,
+              avatar: "",
+            }
+          })
+            .then(function(res) {
+              console.log(res.data);
+              if (res.data.code === 200) {
+                // this.$message.success(res.data.msg)
+                alert(res.data.msg);
+              }
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+
+          // axios
+          //   .post("/api/register", {
+          //     name: this.ruleForm.username,
+          //     gender: this.ruleForm.gender,
+          //     password: this.ruleForm.password,
+          //     confirmpass: this.ruleForm.confimPassword,
+          //     desc: this.ruleForm.desc
+          //   })
+          //   .then(function(res) {
+          //     // console.log(res.data);
+          //     if (res.data.code === 200) {
+          //       // this.$message.success(res.data.msg)
+          //       alert(res.data.msg);
+          //     }
+          //   })
+          //   .catch(function(err) {
+          //     console.log(err);
+          //   });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
